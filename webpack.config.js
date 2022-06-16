@@ -4,7 +4,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index.tsx',
   devtool: 'inline-source-map',
   target: ['web', 'es5'],
   resolve: {
@@ -19,6 +19,7 @@ module.exports = {
       },
     ],
   },
+  cache: false, // cache makes hot reload not working, weird
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -26,11 +27,13 @@ module.exports = {
     }),
   ],
   output: {
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   devServer: {
     compress: true,
     port: 8080,
+    hot: true,
   },
 }
