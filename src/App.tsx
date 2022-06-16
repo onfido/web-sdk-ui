@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Editor } from './Editor'
 import { Frame } from './frame'
 
 const Container = styled.div`
@@ -13,18 +14,29 @@ const Row = styled.div`
   width: 100%;
 `
 
-const Panel = styled.div`
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 50%;
+`
+
+const Panel = styled.div`
+  min-height: 50vh;
 `
 
 const App = () => {
   return (
     <Container>
       <Row>
-        <Panel>Left Panel</Panel>
-        <Panel>
+        <Column>
+          <Panel>{/* Add here steps */}</Panel>
+          <Panel>
+            <Editor />
+          </Panel>
+        </Column>
+        <Column>
           <Frame />
-        </Panel>
+        </Column>
       </Row>
     </Container>
   )

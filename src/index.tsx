@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    padding: 0 1%
+    padding: 0 1%;
   }
 `
 
