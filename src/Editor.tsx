@@ -12,7 +12,8 @@ const Container = styled.div`
 
 const onfidoInitSdkText = `Onfido.init({
   useModal: false,
-  token: 'TOKEN_HERE',
+  token: 'TOKEN_HERE', // don't set this, it will be set for you
+  useMemoryHistory: true, // fix for iframe issue, necessary for now
   onComplete: function (data) {
     // callback for when everything is complete
     console.log('everything is complete')
@@ -20,7 +21,11 @@ const onfidoInitSdkText = `Onfido.init({
   steps: ['welcome', 'document', 'face', 'complete'],
 })`
 
-const Editor = () => {
+type EditorProps = {
+  onClick: (text: string) => void
+}
+
+const Editor = ({ onClick }: EditorProps) => {
   const el = useRef<HTMLDivElement | null>(null)
   const view = useRef<EditorView | null>(null)
 
@@ -39,7 +44,8 @@ const Editor = () => {
       <div ref={el}></div>
       <button
         onClick={() => {
-          console.log(view.current.state.doc.toJSON())
+          const text = view.current.state.doc.toJSON().join('\n').trimEnd()
+          onClick(text)
         }}
       >
         RUN
