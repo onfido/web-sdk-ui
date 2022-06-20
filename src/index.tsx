@@ -8,9 +8,6 @@ const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
     box-sizing: border-box;
   }
-  body {
-    padding: 0 1%;
-  }
 `
 
 const container = document.getElementById('root')

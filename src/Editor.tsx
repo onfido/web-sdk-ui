@@ -7,7 +7,29 @@ import { keymap } from '@codemirror/view'
 import { defaultKeymap } from '@codemirror/commands'
 
 const Container = styled.div`
-  padding: 0 5% 0 0;
+  display: flex;
+  flex-direction: column;
+  height: 97%;
+  justify-content: space-between;
+  padding: 5px 10px;
+`
+
+const Button = styled.button`
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #8caf50; /* Green */
+    color: gray;
+  }
 `
 
 const onfidoInitSdkText = `Onfido.init({
@@ -42,14 +64,14 @@ const Editor = ({ onClick }: EditorProps) => {
   return (
     <Container>
       <div ref={el}></div>
-      <button
+      <Button
         onClick={() => {
           const text = view.current.state.doc.toJSON().join('\n').trimEnd()
           onClick(text)
         }}
       >
         RUN
-      </button>
+      </Button>
     </Container>
   )
 }

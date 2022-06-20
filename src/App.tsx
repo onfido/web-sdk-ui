@@ -20,10 +20,28 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
+  height: 98vh;
 `
 
 const Panel = styled.div`
-  min-height: 50vh;
+  height: 50%;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 0 0 15px 0;
+  padding: 10px 0;
+`
+
+const Title = styled.div`
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+`
+
+const FRameContainer = styled.div`
+  border: 4px dashed gray;
+  border-radius: 5px;
+  margin-left: 10px;
+  height: 100%;
 `
 
 const App = () => {
@@ -47,8 +65,11 @@ const App = () => {
     <Container>
       <Row>
         <Column>
-          <Panel>{/* Add here steps */}</Panel>
           <Panel>
+            <Title>Steps selection (Will be added soon)</Title>
+          </Panel>
+          <Panel>
+            <Title>SDK init code</Title>
             <Editor
               onClick={(text) => {
                 text = text.replace('TOKEN_HERE', jwtToken)
@@ -58,7 +79,7 @@ const App = () => {
           </Panel>
         </Column>
         <Column>
-          <div id="iframe-container"></div>
+          <FRameContainer id="iframe-container"></FRameContainer>
         </Column>
       </Row>
     </Container>

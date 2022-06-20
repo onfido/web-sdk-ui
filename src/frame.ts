@@ -10,9 +10,13 @@ const createIFrame = (params: Params, sdkInitText: string) => {
   const frame = document.createElement('iframe')
   frame.setAttribute('width', '100%')
   frame.setAttribute('height', '100%')
-  frame.setAttribute('style', `height: 95vh;`)
-  frame.referrerPolicy = 'origin'
-  frame.src = 'about:blank'
+  frame.setAttribute(
+    'style',
+    `height: 98vh; border-width: inherit; border-style: none;`
+  )
+  frame.setAttribute('allow', 'camera *;microphone *')
+  frame.referrerPolicy = 'no-referrer'
+  frame.src = ''
 
   frameContainer.appendChild(frame)
 
