@@ -9,7 +9,7 @@ import { defaultKeymap } from '@codemirror/commands'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 97%;
+  height: 100%;
   justify-content: space-between;
   padding: 5px 10px;
 `
@@ -45,9 +45,10 @@ const onfidoInitSdkText = `Onfido.init({
 
 type EditorProps = {
   onClick: (text: string) => void
+  className?: string
 }
 
-const Editor = ({ onClick }: EditorProps) => {
+const Editor = ({ onClick, className }: EditorProps) => {
   const el = useRef<HTMLDivElement | null>(null)
   const view = useRef<EditorView | null>(null)
 
@@ -62,7 +63,7 @@ const Editor = ({ onClick }: EditorProps) => {
   }, [el])
 
   return (
-    <Container>
+    <Container className={className}>
       <div ref={el}></div>
       <Button
         onClick={() => {

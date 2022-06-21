@@ -1,6 +1,10 @@
 import { Params } from './parseParams'
 
-const createIFrame = (params: Params, sdkInitText: string) => {
+const createIFrame = (
+  params: Params,
+  sdkInitText: string,
+  sdkVersion: string
+) => {
   const frameContainer = document.querySelector('#iframe-container')
 
   while (frameContainer.childNodes.length) {
@@ -12,11 +16,11 @@ const createIFrame = (params: Params, sdkInitText: string) => {
   frame.setAttribute('height', '100%')
   frame.setAttribute(
     'style',
-    `height: 98vh; border-width: inherit; border-style: none;`
+    `height: 100%; border-width: inherit; border-style: none;`
   )
   frame.setAttribute('allow', 'camera *;microphone *')
   frame.referrerPolicy = 'no-referrer'
-  frame.src = ''
+  frame.setAttribute('name', 'result')
 
   frameContainer.appendChild(frame)
 
@@ -27,11 +31,12 @@ const createIFrame = (params: Params, sdkInitText: string) => {
   doc.body.appendChild(onfidoMountPoint)
 
   const styleSheet = doc.createElement('link')
+  const pathAndVersion = `${params.basePath}/${sdkVersion}`
   styleSheet.rel = 'stylesheet'
-  styleSheet.href = `${params.basePath}/style.css`
+  styleSheet.href = `${pathAndVersion}/style.css`
 
   const script = doc.createElement('script')
-  script.src = `${params.basePath}/onfido.min.js`
+  script.src = `${pathAndVersion}/onfido.min.js`
   script.onload = () => {
     const sdkInitScript = doc.createElement('script')
     sdkInitScript.text = sdkInitText

@@ -35,6 +35,7 @@
     "@codemirror/lang-javascript": "^6.0.0",
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
+    "@mantine/core": "^4.2.10",
     "codemirror": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
