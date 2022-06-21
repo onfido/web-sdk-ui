@@ -34,8 +34,6 @@ const Button = styled.button`
 
 const onfidoInitSdkText = `Onfido.init({
   useModal: false,
-  token: 'TOKEN_HERE', // don't set this, it will be set for you
-  useMemoryHistory: true, // fix for iframe issue, necessary for now
   onComplete: function (data) {
     // callback for when everything is complete
     console.log('everything is complete')

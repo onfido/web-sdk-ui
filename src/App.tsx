@@ -1,10 +1,11 @@
-import { NativeSelect, Select, SelectItem } from '@mantine/core'
+import { Select } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Editor } from './Editor'
 import { createIFrame } from './frame'
 import { getOnfidoToken } from './getOnfidoToken'
-import { parseParams } from './parseParams'
+import { parseParams } from './utils/parseParams'
+import { replaceSdkInit } from './utils/replaceSdkInit'
 
 const Container = styled.div`
   display: flex;
@@ -87,7 +88,6 @@ const App = () => {
     }
     fetchToken().catch(console.error)
   }, [])
-  console.log(sdkVersion)
   return (
     <Container>
       <Row>
@@ -118,9 +118,10 @@ const App = () => {
           <Panel>
             <Title>SDK init code</Title>
             <StyledEditor
-              onClick={(text) => {
-                text = text.replace('TOKEN_HERE', jwtToken)
-                createIFrame(params, text, sdkVersion)
+              onClick={(sdkInit) => {
+                const replacedSdkInit = replaceSdkInit(sdkInit, jwtToken)
+                console.log(replacedSdkInit)
+                createIFrame(params, replacedSdkInit, sdkVersion)
               }}
             />
           </Panel>
