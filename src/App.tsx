@@ -113,7 +113,11 @@ const App = () => {
               shouldCreate={(query) => true}
               data={SDKVersions}
               value={sdkVersion}
-              onChange={(value) => setSdkVersion(value)}
+              onChange={(value) => {
+                if (value) {
+                  setSdkVersion(value)
+                }
+              }}
             ></StyledSelect>
           </SdkVersionPanel>
           <Panel>

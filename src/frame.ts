@@ -6,6 +6,10 @@ const createIFrame = (
   sdkVersion: string
 ) => {
   const frameContainer = document.querySelector('#iframe-container')
+  if (!frameContainer) {
+    console.error('no frame container')
+    return
+  }
 
   while (frameContainer.childNodes.length) {
     frameContainer.childNodes[0].remove()
@@ -25,6 +29,10 @@ const createIFrame = (
   frameContainer.appendChild(frame)
 
   const doc = frame.contentDocument
+  if (!doc) {
+    console.error('no doc')
+    return
+  }
 
   const onfidoMountPoint = doc.createElement('div')
   onfidoMountPoint.id = 'onfido-mount'

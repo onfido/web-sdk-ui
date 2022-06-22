@@ -67,7 +67,7 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
         doc: text,
         extensions: [basicSetup, javascript(), keymap.of(defaultKeymap)],
       }),
-      parent: el.current,
+      parent: el.current ?? undefined,
     })
   }, [el])
 
@@ -82,7 +82,8 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
         >
           <Button
             onClick={() => {
-              const text = view.current.state.doc.toJSON().join('\n').trimEnd()
+              const text =
+                view.current?.state.doc.toJSON().join('\n').trimEnd() || ''
               onClipboardCopy(text)
               setTooltipVisible(true)
               setTimeout(() => {
@@ -95,7 +96,8 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
         </Styledtooltip>
         <Button
           onClick={() => {
-            const text = view.current.state.doc.toJSON().join('\n').trimEnd()
+            const text =
+              view.current?.state.doc.toJSON().join('\n').trimEnd() || ''
             onRun(text)
           }}
         >
