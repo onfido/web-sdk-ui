@@ -61,15 +61,40 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
 
   const [tooltipVisible, setTooltipVisible] = useState(false)
 
+  const extraKeymap = () => {
+    return keymap.of([
+      {
+        key: 'Cmd-Enter',
+        run() {
+          onRun(view.current?.state.doc.toJSON().join('\n').trimEnd() || '')
+          return true
+        },
+      },
+      {
+        key: 'Ctrl-Enter',
+        run() {
+          onRun(view.current?.state.doc.toJSON().join('\n').trimEnd() || '')
+          return true
+        },
+      },
+    ])
+  }
+
   useEffect(() => {
+    view.current?.destroy()
     view.current = new EditorView({
       state: EditorState.create({
         doc: text,
-        extensions: [basicSetup, javascript(), keymap.of(defaultKeymap)],
+        extensions: [
+          extraKeymap(),
+          basicSetup,
+          javascript(),
+          keymap.of(defaultKeymap),
+        ],
       }),
       parent: el.current ?? undefined,
     })
-  }, [el])
+  }, [el, onRun])
 
   return (
     <Container className={className}>
