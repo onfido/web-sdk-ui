@@ -34,7 +34,6 @@ const buildUrl = (init: string): string => {
 }
 
 const initialOnfidoInitSdkText = `Onfido.init({
-  useModal: false,
   onComplete: function (data) {
     // callback for when everything is complete
     console.log('everything is complete')
