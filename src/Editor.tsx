@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { EditorView, basicSetup } from 'codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import styled from 'styled-components'
 import { EditorState } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { defaultKeymap } from '@codemirror/commands'
+import { Tooltip } from '@mantine/core'
 
 const Container = styled.div`
   display: flex;
@@ -30,30 +31,40 @@ const Button = styled.button`
     background-color: #8caf50; /* Green */
     color: gray;
   }
+
+  &:last-child {
+    margin-left: 15px;
+  }
+
+  flex-grow: 1;
 `
 
-const onfidoInitSdkText = `Onfido.init({
-  useModal: false,
-  onComplete: function (data) {
-    // callback for when everything is complete
-    console.log('everything is complete')
-  },
-  steps: ['welcome', 'document', 'face', 'complete'],
-})`
+const Buttons = styled.div`
+  display: flex;
+`
 
 type EditorProps = {
-  onClick: (text: string) => void
+  text: string
+  onRun: (text: string) => void
+  onClipboardCopy: (text: string) => void
   className?: string
 }
 
-const Editor = ({ onClick, className }: EditorProps) => {
+const Styledtooltip = styled(Tooltip)`
+  display: flex;
+  width: 50%;
+`
+
+const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
   const el = useRef<HTMLDivElement | null>(null)
   const view = useRef<EditorView | null>(null)
+
+  const [tooltipVisible, setTooltipVisible] = useState(false)
 
   useEffect(() => {
     view.current = new EditorView({
       state: EditorState.create({
-        doc: onfidoInitSdkText,
+        doc: text,
         extensions: [basicSetup, javascript(), keymap.of(defaultKeymap)],
       }),
       parent: el.current,
@@ -63,14 +74,34 @@ const Editor = ({ onClick, className }: EditorProps) => {
   return (
     <Container className={className}>
       <div ref={el}></div>
-      <Button
-        onClick={() => {
-          const text = view.current.state.doc.toJSON().join('\n').trimEnd()
-          onClick(text)
-        }}
-      >
-        RUN
-      </Button>
+      <Buttons>
+        <Styledtooltip
+          opened={tooltipVisible}
+          label="URL successfully copied to clipboard!"
+          withArrow
+        >
+          <Button
+            onClick={() => {
+              const text = view.current.state.doc.toJSON().join('\n').trimEnd()
+              onClipboardCopy(text)
+              setTooltipVisible(true)
+              setTimeout(() => {
+                setTooltipVisible(false)
+              }, 2000)
+            }}
+          >
+            COPY URL TO CLIPBOARD
+          </Button>
+        </Styledtooltip>
+        <Button
+          onClick={() => {
+            const text = view.current.state.doc.toJSON().join('\n').trimEnd()
+            onRun(text)
+          }}
+        >
+          RUN
+        </Button>
+      </Buttons>
     </Container>
   )
 }

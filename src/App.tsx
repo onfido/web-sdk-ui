@@ -4,7 +4,11 @@ import styled from 'styled-components'
 import { Editor } from './Editor'
 import { createIFrame } from './frame'
 import { getOnfidoToken } from './getOnfidoToken'
-import { parseParams } from './utils/parseParams'
+import {
+  buildUrl,
+  initialOnfidoInitSdkText,
+  parseParams,
+} from './utils/urlUtils'
 import { replaceSdkInit } from './utils/replaceSdkInit'
 
 const Container = styled.div`
@@ -118,10 +122,16 @@ const App = () => {
           <Panel>
             <Title>SDK init code</Title>
             <StyledEditor
-              onClick={(sdkInit) => {
+              text={params.init || initialOnfidoInitSdkText}
+              onRun={(sdkInit) => {
                 const replacedSdkInit = replaceSdkInit(sdkInit, jwtToken)
                 console.log(replacedSdkInit)
                 createIFrame(params, replacedSdkInit, sdkVersion)
+              }}
+              onClipboardCopy={async (sdkInit) => {
+                console.log(sdkInit)
+                const url = buildUrl(sdkInit)
+                await navigator.clipboard.writeText(url)
               }}
             />
           </Panel>
