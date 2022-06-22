@@ -10,9 +10,8 @@ const replaceSdkInit = (text: string, jwtToken: string) => {
     copy = copy + `\nuseMemoryHistory: true,`
   }
 
-  copy = copy + '\n})'
-
-  return copy
+  // re-add }) characters.
+  return copy + '\n})'
 }
 
 export { replaceSdkInit }

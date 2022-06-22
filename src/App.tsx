@@ -4,11 +4,7 @@ import styled from 'styled-components'
 import { Editor } from './Editor'
 import { createIFrame } from './frame'
 import { getOnfidoToken } from './getOnfidoToken'
-import {
-  buildUrl,
-  initialOnfidoInitSdkText,
-  parseParams,
-} from './utils/urlUtils'
+import { buildShareUrl, parseUrlParamsOrDefault } from './utils/urlUtils'
 import { replaceSdkInit } from './utils/replaceSdkInit'
 
 const Container = styled.div`
@@ -76,8 +72,11 @@ const StyledEditor = styled(Editor)`
 
 const App = () => {
   const [jwtToken, setJwtToken] = useState('')
-  const [params] = useState(parseParams())
-  const [sdkVersion, setSdkVersion] = useState('8.1.0')
+  const [params, setParams] = useState(parseUrlParamsOrDefault())
+  if (SDKVersions.indexOf(params.version) === -1) {
+    // allow the select to show even custom versions
+    SDKVersions.push(params.version)
+  }
   if (!params.token) {
     return (
       <Container>
@@ -105,7 +104,7 @@ const App = () => {
                 if (SDKVersions.indexOf(value) === -1) {
                   SDKVersions.push(value)
                 }
-                setSdkVersion(value)
+                setParams({ ...params, version: value })
               }}
               getCreateLabel={(value) => {
                 if (!value || SDKVersions.indexOf(value) > -1) {
@@ -115,10 +114,11 @@ const App = () => {
               }}
               shouldCreate={(query) => true}
               data={SDKVersions}
-              value={sdkVersion}
+              value={params.version}
               onChange={(value) => {
+                console.log(value)
                 if (value) {
-                  setSdkVersion(value)
+                  setParams({ ...params, version: value })
                 }
               }}
             ></StyledSelect>
@@ -129,15 +129,15 @@ const App = () => {
           <Panel>
             <Title>SDK init code</Title>
             <StyledEditor
-              text={params.init || initialOnfidoInitSdkText}
+              text={params.init}
               onRun={(sdkInit) => {
                 const replacedSdkInit = replaceSdkInit(sdkInit, jwtToken)
                 console.log(replacedSdkInit)
-                createIFrame(params, replacedSdkInit, sdkVersion)
+                createIFrame(params, replacedSdkInit, params.version)
               }}
               onClipboardCopy={async (sdkInit) => {
                 console.log(sdkInit)
-                const url = buildUrl(sdkInit)
+                const url = buildShareUrl(sdkInit, params.version)
                 await navigator.clipboard.writeText(url)
               }}
             />

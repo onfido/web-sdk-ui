@@ -1,7 +1,3 @@
-type TokenResp = {
-  message: string
-}
-
 const getOnfidoToken = async (token: string): Promise<string> => {
   var req = new Request('https://token-factory.onfido.com/sdk_token?')
   req.headers.append('Authorization', 'BASIC ' + token)
