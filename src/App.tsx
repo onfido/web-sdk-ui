@@ -107,9 +107,12 @@ const App = () => {
                 }
                 setSdkVersion(value)
               }}
-              getCreateLabel={() =>
-                'Free type and press enter for other SDK version'
-              }
+              getCreateLabel={(value) => {
+                if (!value || SDKVersions.indexOf(value) > -1) {
+                  return 'Free type for custom SDK version'
+                }
+                return `Click here or press enter for '${value}' SDK version`
+              }}
               shouldCreate={(query) => true}
               data={SDKVersions}
               value={sdkVersion}
