@@ -1,4 +1,4 @@
-import { Params } from './utils/urlUtils'
+import { Params } from './store/params'
 
 const createIFrame = (
   params: Params,
