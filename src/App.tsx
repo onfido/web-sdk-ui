@@ -1,11 +1,12 @@
 import { Select } from '@mantine/core'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Editor } from './Editor'
 import { createIFrame } from './frame'
-import { getOnfidoToken } from './getOnfidoToken'
-import { buildShareUrl, parseUrlParamsOrDefault } from './utils/urlUtils'
+import { buildShareUrl } from './utils/buildShareUrl'
 import { replaceSdkInit } from './utils/replaceSdkInit'
+import { useStore } from './store'
+import { setParams } from './store/params'
 
 const Container = styled.div`
   display: flex;
@@ -60,8 +61,6 @@ const FRameContainer = styled.div`
   height: 100%;
 `
 
-const SDKVersions = ['6.20.0', '8.0.0', '8.1.0', '9.0.0-beta.3']
-
 const StyledSelect = styled(Select)`
   width: 80%;
 `
@@ -71,26 +70,16 @@ const StyledEditor = styled(Editor)`
 `
 
 const App = () => {
-  const [jwtToken, setJwtToken] = useState('')
-  const [params, setParams] = useState(parseUrlParamsOrDefault())
-  if (SDKVersions.indexOf(params.version) === -1) {
-    // allow the select to show even custom versions
-    SDKVersions.push(params.version)
-  }
-  if (!params.token) {
-    return (
-      <Container>
-        Please set the onfido sdk ?token= parameter in the URL
-      </Container>
-    )
-  }
+  const { collect, jwtToken, sdkVersions, params } = useStore()
+
   useEffect(() => {
-    const fetchToken = async () => {
-      const jwt = await getOnfidoToken(params.token)
-      setJwtToken(jwt)
-    }
-    fetchToken().catch(console.error)
+    collect()
   }, [])
+  
+  if(!jwtToken){
+    return 'loading'
+  }
+
   return (
     <Container>
       <Row>
@@ -101,19 +90,13 @@ const App = () => {
               creatable
               searchable
               onCreate={(value) => {
-                if (SDKVersions.indexOf(value) === -1) {
-                  SDKVersions.push(value)
+                if (sdkVersions.indexOf(value) === -1) {
+                  sdkVersions.push(value)
                 }
                 setParams({ ...params, version: value })
               }}
-              getCreateLabel={(value) => {
-                if (!value || SDKVersions.indexOf(value) > -1) {
-                  return 'Free type for custom SDK version'
-                }
-                return `Click here or press enter for '${value}' SDK version`
-              }}
               shouldCreate={(query) => true}
-              data={SDKVersions}
+              data={sdkVersions}
               value={params.version}
               onChange={(value) => {
                 console.log(value)
@@ -132,12 +115,10 @@ const App = () => {
               text={params.init}
               onRun={(sdkInit) => {
                 const replacedSdkInit = replaceSdkInit(sdkInit, jwtToken)
-                console.log(replacedSdkInit)
                 createIFrame(params, replacedSdkInit, params.version)
               }}
               onClipboardCopy={async (sdkInit) => {
-                console.log(sdkInit)
-                const url = buildShareUrl(sdkInit, params.version)
+                const url = buildShareUrl(sdkInit)
                 await navigator.clipboard.writeText(url)
               }}
             />
