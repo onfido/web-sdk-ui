@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { EditorState } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { defaultKeymap } from '@codemirror/commands'
-import { Tooltip } from '@mantine/core'
 
 const Container = styled.div`
   display: flex;
@@ -50,10 +49,10 @@ type EditorProps = {
   className?: string
 }
 
-const Styledtooltip = styled(Tooltip)`
-  display: flex;
-  width: 50%;
-`
+// const Styledtooltip = styled(Tooltip)`
+//   display: flex;
+//   width: 50%;
+// `
 
 const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
   const el = useRef<HTMLDivElement | null>(null)
@@ -100,7 +99,7 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
     <Container className={className}>
       <div ref={el}></div>
       <Buttons>
-        <Styledtooltip
+        {/* <Styledtooltip
           opened={tooltipVisible}
           label="URL successfully copied to clipboard!"
           withArrow
@@ -118,7 +117,7 @@ const Editor = ({ text, onRun, onClipboardCopy, className }: EditorProps) => {
           >
             COPY URL TO CLIPBOARD
           </Button>
-        </Styledtooltip>
+        </Styledtooltip> */}
         <Button
           onClick={() => {
             const text =
