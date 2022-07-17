@@ -45,9 +45,19 @@ const createIFrame = (
 
   const script = doc.createElement('script')
   script.src = `${pathAndVersion}/onfido.min.js`
+  console.log('sdkInitText', sdkInitText)
   script.onload = () => {
     const sdkInitScript = doc.createElement('script')
-    sdkInitScript.text = sdkInitText
+    sdkInitScript.text = `
+      window.onfidoSdkHandle = ${sdkInitText}
+
+      window.addEventListener('message', function (e) {
+        console.log('received message', onfidoSdkHandle)
+        window.parent.postMessage(JSON.stringify(onfidoSdkHandle.options))
+        window.parent.postMessage(onfidoSdkHandle.options.onComplete.toString())
+      })
+    
+    `
     doc.head.appendChild(sdkInitScript)
   }
 
@@ -56,3 +66,13 @@ const createIFrame = (
 }
 
 export { createIFrame }
+
+const getOptionsFromFrame = () => {
+  const frameContainer = document.querySelector('#iframe-container iframe')
+  console.log(frameContainer.contentWindow)
+  window.addEventListener('message', (e) => {
+    console.log('from iframe message', e.data)
+  })
+  frameContainer.contentWindow.postMessage({ event: 'getConfig' })
+}
+window.getOptionsFromFrame = getOptionsFromFrame

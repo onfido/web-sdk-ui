@@ -1,0 +1,35 @@
+@use '@onfido/castor';
+
+:global {
+  // only recommended for prototyping
+  @include castor.components();
+
+  // @include castor.Field();
+  // @include castor.FieldLabel();
+  // @include castor.HelperText();
+  // @include castor.Validation();
+  // @include castor.Asterisk();
+  // @include castor.Button();
+  // @include castor.Input();
+  // @include castor.Select();
+  // @include castor.Icon();
+}
+
+:root {
+  @include castor.day();
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+
+.ods-select-dropdown:where(.-borderless){
+  width: 100% !important;
+}
